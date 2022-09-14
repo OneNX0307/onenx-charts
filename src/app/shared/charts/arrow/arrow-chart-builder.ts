@@ -1,22 +1,7 @@
 import * as echarts from 'echarts/core';
 import {EChartsType} from 'echarts/core';
-import {DatasetComponentOption, GridComponentOption, TitleComponentOption} from 'echarts/components';
-import {LineSeriesOption} from 'echarts/charts';
-import {CustomSeriesOption, ScatterSeriesOption} from 'echarts';
-
-// 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
-type ECOption = echarts.ComposeOption<
-  | CustomSeriesOption
-  | LineSeriesOption
-  | ScatterSeriesOption
-  | TitleComponentOption
-  | GridComponentOption
-  | DatasetComponentOption
-  >;
-
-type Series = CustomSeriesOption
-  | LineSeriesOption
-  | ScatterSeriesOption;
+import {GridComponentOption} from 'echarts/components';
+import {ECOption, Series} from '../model';
 
 export class ArrowChartBuilder {
   private option: ECOption = {};
@@ -101,7 +86,7 @@ export class ArrowChartBuilder {
   }
 
   public build(): ArrowChartBuilder {
-    this.chart?.clear();
+    // this.chart?.clear();
     this.chart?.setOption(this.option);
     return this;
   }

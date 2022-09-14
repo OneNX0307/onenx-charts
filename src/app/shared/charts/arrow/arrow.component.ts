@@ -4,14 +4,16 @@ import {
   TitleComponent,
   LegendComponent,
   DataZoomComponent,
-  GridComponent
+  GridComponent,
+  TooltipComponent,
+  TransformComponent, DatasetComponent
 } from 'echarts/components';
-import { LabelLayout } from 'echarts/features';
-import { CanvasRenderer } from 'echarts/renderers';
+import {LabelLayout, UniversalTransition} from 'echarts/features';
+import {CanvasRenderer} from 'echarts/renderers';
 import {ArrowChartBuilder} from './arrow-chart-builder';
 import {EChartsType} from 'echarts/core';
 import {ChartSeriesBuilder} from './chart-series-builder';
-
+import {CustomChart} from 'echarts/charts';
 
 @Component({
   selector: 'app-arrow',
@@ -21,51 +23,57 @@ import {ChartSeriesBuilder} from './chart-series-builder';
 export class ArrowComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private chart: EChartsType | undefined;
+  domId = 'chart';
 
   constructor() { }
 
   ngOnInit(): void {
-    this.register();
+    this.registerComponents();
   }
 
   ngAfterViewInit(): void {
-    this.draw();
+    this.drawChart();
   }
 
   ngOnDestroy(): void {
     this.chart?.dispose();
   }
 
-  private draw(): void {
+  private drawChart(): void {
     const series = new ChartSeriesBuilder()
       .withWaferCircle(150)
-      // .withWaferNortch()
-      // .withFieldLayout()
-      // .withArrows()
+      .withWaferNotch()
+      .withFieldLayout()
+      .withArrows()
+      .withMarks()
       .build();
 
     this.chart = new ArrowChartBuilder()
-      .init('chart')
+      .init(this.domId)
       .withTitle()
       .withGrid()
-      .withAxis(-160, 160)
-      .withDataZoom(-160, 160)
+      .withAxis(-150, 150)
+      .withDataZoom(-150, 150)
       .withSeries(series)
       .build()
       .getChart();
   }
 
-  private register(): void {
-    // 注册必须的组件
+  private registerComponents(): void {
     echarts.use([
       TitleComponent,
+      TooltipComponent,
       GridComponent,
-      LegendComponent,
-      DataZoomComponent,
+      DatasetComponent,
+      TransformComponent,
       LabelLayout,
-      CanvasRenderer
+      UniversalTransition,
+      CanvasRenderer,
+      CustomChart,
+      LegendComponent,
+      TooltipComponent,
+      DataZoomComponent
     ]);
-
   }
 
 }
