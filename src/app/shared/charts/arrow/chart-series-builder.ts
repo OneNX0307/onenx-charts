@@ -4,7 +4,7 @@ import {
   CustomSeriesRenderItemParams,
   CustomSeriesRenderItemReturn
 } from 'echarts/types/dist/echarts';
-import {Series} from '../model';
+import {Field, Series} from '../model';
 
 
 
@@ -16,7 +16,7 @@ export class ChartSeriesBuilder {
       type: 'custom',
       clip: true,
       data: [radius],
-      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) => this.renderItem(params, api)
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) => this.renderCircle(params, api)
     };
     this.series.push(waferCircle);
 
@@ -29,9 +29,18 @@ export class ChartSeriesBuilder {
     return this;
   }
 
-  public withFieldLayout(): ChartSeriesBuilder {
-    // TODO:
+  public withFieldLayout(fields: Field[]): ChartSeriesBuilder {
+    if (fields.length <= 0) {
+      return this;
+    }
+    const layout: CustomSeriesOption = {
+      type: 'custom',
+      clip: true,
+      data: fields,
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) => this.renderLayout(params, api, fields)
+    };
 
+    this.series.push(layout);
     return this;
   }
 
@@ -49,7 +58,7 @@ export class ChartSeriesBuilder {
     return this.series;
   }
 
-  private renderItem(_: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI): CustomSeriesRenderItemReturn {
+  private renderCircle(_: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI): CustomSeriesRenderItemReturn {
     let unit = 0;
     if (api && api.size){
       const size = api.size([1, 1]);
@@ -73,4 +82,29 @@ export class ChartSeriesBuilder {
     };
   }
 
+  private renderLayout(params: CustomSeriesRenderItemParams,
+                       api: CustomSeriesRenderItemAPI, fields: Field[]): CustomSeriesRenderItemReturn {
+    const item = fields[params.dataIndex];
+    const coordinates = [item.coordinates.x - item.size.width / 2.0, item.coordinates.y + item.size.height / 2.0];
+    let unit = 0;
+    if (api && api.size){
+      const size = api.size([1, 1]);
+      if (size instanceof Array){
+        unit = size[0];
+      }
+    }
+    return {
+      type: 'rect',
+      shape: {
+        x: api.coord(coordinates)[0],
+        y: api.coord(coordinates)[1],
+        width: unit * item.size.width,
+        height: unit * item.size.height
+      },
+      style: {
+        fill: 'grey',
+        stroke: 'black'
+      },
+    };
+  }
 }

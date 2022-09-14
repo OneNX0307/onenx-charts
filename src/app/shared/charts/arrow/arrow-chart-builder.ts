@@ -7,11 +7,11 @@ export class ArrowChartBuilder {
   private option: ECOption = {};
   private chart: EChartsType | undefined;
 
-  public init(domId: string): ArrowChartBuilder {
+  public init(domId: string, width: number, height: number): ArrowChartBuilder {
     const dom = document.getElementById(domId);
     if (dom) {
       this.chart = echarts.getInstanceByDom(dom) ??
-        echarts.init(dom, undefined);
+        echarts.init(dom, undefined, {width, height});
     }
     return this;
   }
