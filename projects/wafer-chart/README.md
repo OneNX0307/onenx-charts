@@ -2,15 +2,15 @@
  
 # Installation
 ```shell
-npm install wafer-chart --save
+npm install ngx-wafer-chart --save
 ```
 # Usage
 ```html
-<smee-wafer-chart [fields$]="fields$"></smee-wafer-chart>
+<ngx-ngx-wafer-chart [fields$]="fields$"></ngx-ngx-wafer-chart>
 ```
 
 ```typescript
-import {Field} from 'wafer-chart/lib/model';
+import {Field} from 'ngx-wafer-chart/lib/model';
 
 fields$: Observable<Field[]> = of([]);
 

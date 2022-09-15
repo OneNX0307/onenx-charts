@@ -19,7 +19,7 @@ import {SeriesBuilder} from './series-builder';
 import {ChartBuilder} from './chart-builder';
 
 @Component({
-  selector: 'smee-wafer-chart',
+  selector: 'ngx-wafer-chart',
   template: ` <div [id]="domId"></div> `,
   styles: []
 })

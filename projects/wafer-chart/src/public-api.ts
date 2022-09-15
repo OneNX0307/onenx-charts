@@ -1,5 +1,5 @@
 /*
- * Public API Surface of wafer-chart
+ * Public API Surface of ngx-wafer-chart
  */
 
 export * from './lib/wafer-chart.service';
