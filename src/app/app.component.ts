@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {Field} from './shared/charts/model';
+import {Field} from '../../projects/wafer-chart/src/lib/model';
 
 @Component({
   selector: 'app-root',

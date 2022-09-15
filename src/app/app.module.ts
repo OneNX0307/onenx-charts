@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {ChartsModule} from './shared/charts/charts.module';
 import {HttpClientModule} from '@angular/common/http';
+import {WaferChartModule} from '../../projects/wafer-chart/src/lib/wafer-chart.module';
 
 @NgModule({
   declarations: [
@@ -13,8 +13,8 @@ import {HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    WaferChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]

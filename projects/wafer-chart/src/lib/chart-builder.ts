@@ -1,13 +1,13 @@
 import * as echarts from 'echarts/core';
 import {EChartsType} from 'echarts/core';
 import {GridComponentOption} from 'echarts/components';
-import {ECOption, Series} from '../model';
+import {ECOption, Series} from './model';
 
-export class ArrowChartBuilder {
+export class ChartBuilder {
   private option: ECOption = {};
   private chart: EChartsType | undefined;
 
-  public init(domId: string, width: number, height: number): ArrowChartBuilder {
+  public init(domId: string, width: number, height: number): ChartBuilder {
     const dom = document.getElementById(domId);
     if (dom) {
       this.chart = echarts.getInstanceByDom(dom) ??
@@ -16,7 +16,7 @@ export class ArrowChartBuilder {
     return this;
   }
 
-  public withTitle(title: string = '', subTitle: string = ''): ArrowChartBuilder {
+  public withTitle(title: string = '', subTitle: string = ''): ChartBuilder {
     this.option.title = {
       text: title,
       subtext: subTitle,
@@ -28,7 +28,7 @@ export class ArrowChartBuilder {
     return this;
   }
 
-  public withGrid(grids: GridComponentOption[] = []): ArrowChartBuilder {
+  public withGrid(grids: GridComponentOption[] = []): ChartBuilder {
     this.option.grid = grids.length > 0 ? grids : [
       {
         top: '10%',
@@ -40,7 +40,7 @@ export class ArrowChartBuilder {
     return this;
   }
 
-  public withDataZoom(start: number, end: number): ArrowChartBuilder {
+  public withDataZoom(start: number, end: number): ChartBuilder {
     this.option.dataZoom = [
       {
         type: 'inside',
@@ -62,7 +62,7 @@ export class ArrowChartBuilder {
     return this;
   }
 
-  public withAxis(min: number, max: number): ArrowChartBuilder {
+  public withAxis(min: number, max: number): ChartBuilder {
     this.option.xAxis = [
       {
         show: true,
@@ -80,13 +80,13 @@ export class ArrowChartBuilder {
     return this;
   }
 
-  public withSeries(series: Series[]): ArrowChartBuilder {
+  public withSeries(series: Series[]): ChartBuilder {
     this.option.series = series;
     return this;
   }
 
-  public build(): ArrowChartBuilder {
-    // this.chart?.clear();
+  public build(): ChartBuilder {
+    this.chart?.clear();
     this.chart?.setOption(this.option);
     return this;
   }

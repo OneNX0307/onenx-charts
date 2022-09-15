@@ -4,14 +4,14 @@ import {
   CustomSeriesRenderItemParams,
   CustomSeriesRenderItemReturn
 } from 'echarts/types/dist/echarts';
-import {Field, Series} from '../model';
+import {Field, Series} from './model';
 
 
 
-export class ChartSeriesBuilder {
+export class SeriesBuilder {
   private series: Series[] = [];
 
-  public withWaferCircle(radius: number): ChartSeriesBuilder {
+  public withWaferCircle(radius: number): SeriesBuilder {
     const waferCircle: CustomSeriesOption = {
       type: 'custom',
       clip: true,
@@ -23,13 +23,13 @@ export class ChartSeriesBuilder {
     return this;
   }
 
-  public withWaferNotch(): ChartSeriesBuilder {
+  public withWaferNotch(): SeriesBuilder {
     // TODO:
 
     return this;
   }
 
-  public withFieldLayout(fields: Field[]): ChartSeriesBuilder {
+  public withFieldLayout(fields: Field[]): SeriesBuilder {
     if (fields.length <= 0) {
       return this;
     }
@@ -44,12 +44,12 @@ export class ChartSeriesBuilder {
     return this;
   }
 
-  public withArrows(): ChartSeriesBuilder {
+  public withArrows(): SeriesBuilder {
     // TODO:
     return this;
   }
 
-  public withMarks(): ChartSeriesBuilder {
+  public withMarks(): SeriesBuilder {
     // TODO:
     return this;
   }
