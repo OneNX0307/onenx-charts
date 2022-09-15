@@ -16,7 +16,7 @@ export class ChartBuilder {
     return this;
   }
 
-  public withTitle(title: string = '', subTitle: string = ''): ChartBuilder {
+  public title(title: string = '', subTitle: string = ''): ChartBuilder {
     this.option.title = {
       text: title,
       subtext: subTitle,
@@ -28,7 +28,7 @@ export class ChartBuilder {
     return this;
   }
 
-  public withGrid(grids: GridComponentOption[] = []): ChartBuilder {
+  public grid(grids: GridComponentOption[] = []): ChartBuilder {
     this.option.grid = grids.length > 0 ? grids : [
       {
         top: '10%',
@@ -40,7 +40,7 @@ export class ChartBuilder {
     return this;
   }
 
-  public withDataZoom(start: number, end: number): ChartBuilder {
+  public zoom(start: number, end: number): ChartBuilder {
     this.option.dataZoom = [
       {
         type: 'inside',
@@ -62,25 +62,39 @@ export class ChartBuilder {
     return this;
   }
 
-  public withAxis(min: number, max: number): ChartBuilder {
+  public axis(min: number, max: number, interval: number): ChartBuilder {
     this.option.xAxis = [
       {
         show: true,
         min,
-        max
+        max,
+        interval,
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          show: false
+        }
       }
     ];
     this.option.yAxis = [
       {
         show: true,
         min,
-        max
+        max,
+        interval,
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          show: false
+        }
       }
     ];
     return this;
   }
 
-  public withSeries(series: Series[]): ChartBuilder {
+  public series(series: Series[]): ChartBuilder {
     this.option.series = series;
     return this;
   }
@@ -91,7 +105,7 @@ export class ChartBuilder {
     return this;
   }
 
-  public getChart(): EChartsType | undefined {
+  public get(): EChartsType | undefined {
     return this.chart;
   }
 }

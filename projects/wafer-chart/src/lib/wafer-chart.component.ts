@@ -14,7 +14,7 @@ import {
 import {LabelLayout, UniversalTransition} from 'echarts/features';
 import {CanvasRenderer} from 'echarts/renderers';
 import {CustomChart} from 'echarts/charts';
-import {Field} from './model';
+import {Field, Series} from './model';
 import {SeriesBuilder} from './series-builder';
 import {ChartBuilder} from './chart-builder';
 
@@ -27,8 +27,20 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private chart: EChartsType | undefined;
   domId = 'chart';
+
   @Input() width = 600;
   @Input() height = 600;
+
+  @Input() radius = 150;
+
+  @Input() showNotch = true;
+  @Input() showFields = true;
+  @Input() showMarks = true;
+  @Input() showArrows = true;
+  @Input() showAxis = true;
+  @Input() showGrid = true;
+  @Input() interval = 20;
+
   @Input() fields$: Observable<Field[]> = of([]);
 
   private fieldsSubscription: Subscription | undefined;
@@ -51,23 +63,32 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawChart(fields: Field[]): void {
-    const series = new SeriesBuilder()
-      .withWaferCircle(150)
-      .withWaferNotch()
-      .withFieldLayout(fields.length > 0 ? fields : [])
-      .withArrows()
-      .withMarks()
-      .build();
+    let series: Series[];
+    let builder = new SeriesBuilder().withWaferCircle(150);
+
+    if (this.showNotch) {
+      builder = builder.withWaferNotch();
+    }
+    if (this.showFields) {
+      builder = builder.withFieldLayout(fields.length > 0 ? fields : []);
+    }
+    if (this.showArrows) {
+      builder = builder.withArrows();
+    }
+    if (this.showMarks) {
+      builder = builder.withMarks();
+    }
+    series = builder.build();
 
     this.chart = new ChartBuilder()
       .init(this.domId, this.width, this.height)
-      .withTitle()
-      .withGrid()
-      .withAxis(-150, 150)
-      .withDataZoom(-150, 150)
-      .withSeries(series)
+      .title()
+      .grid()
+      .axis(-this.radius, this.radius, this.interval)
+      .zoom(-this.radius, this.radius)
+      .series(series)
       .build()
-      .getChart();
+      .get();
   }
 
   private registerComponents(): void {
