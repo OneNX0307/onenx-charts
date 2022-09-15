@@ -4,7 +4,10 @@ import {
   CustomSeriesRenderItemParams,
   CustomSeriesRenderItemReturn
 } from 'echarts/types/dist/echarts';
-import {Field, Series} from './model';
+import {Field} from '../model/field';
+import {ArrowInfo} from '../model/arrow-info';
+
+type Series = CustomSeriesOption;
 
 export class SeriesBuilder {
   private series: Series[] = [];
@@ -44,8 +47,16 @@ export class SeriesBuilder {
     return this;
   }
 
-  public arrows(): SeriesBuilder {
-    // TODO:
+  public arrows(arrows: ArrowInfo[]): SeriesBuilder {
+    const arrowsSeries: CustomSeriesOption = {
+      type: 'custom',
+      clip: true,
+      data: arrows,
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) =>
+        this.renderArrows(params, api, arrows)
+    };
+
+    this.series.push(arrowsSeries);
     return this;
   }
 
@@ -70,6 +81,7 @@ export class SeriesBuilder {
     const value = api.value(0);
     return {
       type: 'circle',
+      z2: 1,
       shape: {
         cx: api.coord([0, 0])[0],
         cy: api.coord([0, 0])[1],
@@ -88,8 +100,8 @@ export class SeriesBuilder {
                        fields: Field[]): CustomSeriesRenderItemReturn {
     const item = fields[params.dataIndex];
     const coordinates = [
-      item.coordinates.x - item.size.width / 2.0,
-      item.coordinates.y + item.size.height / 2.0
+      item.coordinate.x - item.size.width / 2.0,
+      item.coordinate.y + item.size.height / 2.0
     ];
     let unit = 0;
     if (api && api.size) {
@@ -100,6 +112,7 @@ export class SeriesBuilder {
     }
     return {
       type: 'rect',
+      z2: 2,
       shape: {
         x: api.coord(coordinates)[0],
         y: api.coord(coordinates)[1],
@@ -110,6 +123,33 @@ export class SeriesBuilder {
         fill: 'grey',
         stroke: 'black'
       },
+    };
+  }
+
+  private renderArrows(params: CustomSeriesRenderItemParams,
+                       api: CustomSeriesRenderItemAPI,
+                       arrows: ArrowInfo[]): CustomSeriesRenderItemReturn {
+    const item = arrows[params.dataIndex];
+    const sourceCoordinate = [item.coordinate2d.x, item.coordinate2d.y];
+    const desCoordinate = [item.coordinate2d.x + item.offset.dx, item.coordinate2d.y + item.offset.dy];
+
+    return {
+      type: 'group',
+      children: [
+        {
+          type: 'path',
+          z2: 3,
+          shape: {
+            pathData: `M ${api.coord(sourceCoordinate)[0]} ${api.coord(sourceCoordinate)[1]}
+                         ${api.coord(desCoordinate)[0]} ${api.coord(desCoordinate)[1]}`
+          },
+          style: {
+            stroke: item.color,
+            fill: 'transparent',
+            lineWidth: 0.5
+          }
+        }
+      ]
     };
   }
 }

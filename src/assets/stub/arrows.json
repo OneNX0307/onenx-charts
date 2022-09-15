@@ -1,40 +1,15 @@
 [
   {
-    "arrowInfos": [
-      {
-        "coors": [
-          [
-            30,
-            40
-          ],
-          [
-            30,
-            55
-          ]
-        ],
-        "lineStyle": {
-          "color": "red",
-          "width": 2
-        }
-      },
-      {
-        "coors": [
-          [
-            -30,
-            40
-          ],
-          [
-            -30,
-            55
-          ]
-        ],
-        "lineStyle": {
-          "color": "red",
-          "width": 2
-        }
-      }
-    ],
     "lotId": "lot01",
-    "waferId": "wafer01"
+    "waferId": "wafer01",
+    "coordinate2d": {
+      "x": 30,
+      "y": 40
+    },
+    "offset": {
+      "dx": 10,
+      "dy": 15
+    },
+    "color": "red"
   }
 ]

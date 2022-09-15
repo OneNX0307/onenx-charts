@@ -1,6 +1,6 @@
 [
   {
-    "coordinates": {
+    "coordinate": {
       "x": -13,
       "y": -16.5
     },
@@ -10,7 +10,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 13,
       "y": 16.5
     },
@@ -20,7 +20,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": -13,
       "y": 16.5
     },
@@ -30,7 +30,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 13,
       "y": -16.5
     },
@@ -40,7 +40,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 39,
       "y": -49.5
     },
@@ -50,7 +50,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 65,
       "y": -82.5
     },
@@ -60,7 +60,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": -39,
       "y": 49.5
     },
@@ -70,7 +70,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": -65,
       "y": 82.5
     },
@@ -80,7 +80,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 39,
       "y": 49.5
     },
@@ -90,7 +90,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": 65,
       "y": 82.5
     },
@@ -100,7 +100,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": -39,
       "y": -49.5
     },
@@ -110,7 +110,7 @@
     }
   },
   {
-    "coordinates": {
+    "coordinate": {
       "x": -65,
       "y": -82.5
     },

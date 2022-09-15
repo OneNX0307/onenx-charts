@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {ArrowInfo, Field} from '../../projects/wafer-chart/src/lib/model';
+import {Field} from '../../projects/wafer-chart/src/model/field';
+import {ArrowInfo} from '../../projects/wafer-chart/src/model/arrow-info';
 
 @Component({
   selector: 'app-root',

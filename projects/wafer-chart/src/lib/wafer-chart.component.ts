@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {EChartsType} from 'echarts/core';
-import {Observable, of, Subscription} from 'rxjs';
+import {forkJoin, Observable, of, Subscription} from 'rxjs';
 import * as echarts from 'echarts/core';
 import {
   DatasetComponent,
@@ -14,9 +14,11 @@ import {
 import {LabelLayout, UniversalTransition} from 'echarts/features';
 import {CanvasRenderer} from 'echarts/renderers';
 import {CustomChart} from 'echarts/charts';
-import {ArrowInfo, Field} from './model';
 import {SeriesBuilder} from './series-builder';
 import {ChartBuilder} from './chart-builder';
+import {Field} from '../model/field';
+import {ArrowInfo} from '../model/arrow-info';
+import {ChartInfo} from '../model/chart-info';
 
 @Component({
   selector: 'ngx-wafer-chart',
@@ -50,9 +52,10 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.fields$.subscribe(fields => {
-      this.drawChart(fields);
-    });
+    forkJoin({
+      fields: this.fields$,
+      arrows: this.arrows$
+    }).subscribe((data: ChartInfo) => this.drawChart(data));
   }
 
   ngOnDestroy(): void {
@@ -60,13 +63,13 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fieldsSubscription?.unsubscribe();
   }
 
-  private drawChart(fields: Field[]): void {
+  private drawChart(info: ChartInfo): void {
     let builder = new SeriesBuilder().circle(150);
     builder = this.showNotch ? builder.notch() : builder;
 
     const series = builder
-      .layout(fields.length > 0 ? fields : [])
-      .arrows()
+      .layout(info.fields.length > 0 ? info.fields : [])
+      .arrows(info.arrows.length > 0 ? info.arrows : [])
       .marks()
       .build();
 
@@ -77,8 +80,7 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .axis(-this.radius, this.radius, this.interval)
       .zoom(-this.radius, this.radius)
       .series(series)
-      .build()
-      .get();
+      .build();
   }
 
   private registerComponents(): void {

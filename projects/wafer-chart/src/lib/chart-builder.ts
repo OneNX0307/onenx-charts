@@ -1,7 +1,18 @@
 import * as echarts from 'echarts/core';
 import {EChartsType} from 'echarts/core';
-import {GridComponentOption} from 'echarts/components';
-import {ECOption, Series} from './model';
+import {DatasetComponentOption, GridComponentOption, TitleComponentOption} from 'echarts/components';
+import {CustomSeriesOption, ScatterSeriesOption, TooltipComponentOption} from 'echarts';
+
+type ECOption = echarts.ComposeOption<
+  | TitleComponentOption
+  | TooltipComponentOption
+  | GridComponentOption
+  | DatasetComponentOption
+  | CustomSeriesOption
+  | ScatterSeriesOption
+  >;
+
+type Series = CustomSeriesOption;
 
 export class ChartBuilder {
   private option: ECOption = {};
@@ -99,13 +110,10 @@ export class ChartBuilder {
     return this;
   }
 
-  public build(): ChartBuilder {
+  public build(): EChartsType | undefined {
     this.chart?.clear();
     this.chart?.setOption(this.option);
-    return this;
-  }
-
-  public get(): EChartsType | undefined {
     return this.chart;
   }
+
 }
