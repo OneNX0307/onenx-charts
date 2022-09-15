@@ -1,0 +1,40 @@
+[
+  {
+    "arrowInfos": [
+      {
+        "coors": [
+          [
+            30,
+            40
+          ],
+          [
+            30,
+            55
+          ]
+        ],
+        "lineStyle": {
+          "color": "red",
+          "width": 2
+        }
+      },
+      {
+        "coors": [
+          [
+            -30,
+            40
+          ],
+          [
+            -30,
+            55
+          ]
+        ],
+        "lineStyle": {
+          "color": "red",
+          "width": 2
+        }
+      }
+    ],
+    "lotId": "lot01",
+    "waferId": "wafer01"
+  }
+]

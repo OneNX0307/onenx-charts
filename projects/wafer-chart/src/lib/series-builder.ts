@@ -6,30 +6,29 @@ import {
 } from 'echarts/types/dist/echarts';
 import {Field, Series} from './model';
 
-
-
 export class SeriesBuilder {
   private series: Series[] = [];
 
-  public withWaferCircle(radius: number): SeriesBuilder {
+  public circle(radius: number): SeriesBuilder {
     const waferCircle: CustomSeriesOption = {
       type: 'custom',
       clip: true,
       data: [radius],
-      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) => this.renderCircle(params, api)
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) =>
+        this.renderCircle(params, api)
     };
     this.series.push(waferCircle);
 
     return this;
   }
 
-  public withWaferNotch(): SeriesBuilder {
+  public notch(): SeriesBuilder {
     // TODO:
 
     return this;
   }
 
-  public withFieldLayout(fields: Field[]): SeriesBuilder {
+  public layout(fields: Field[]): SeriesBuilder {
     if (fields.length <= 0) {
       return this;
     }
@@ -37,19 +36,20 @@ export class SeriesBuilder {
       type: 'custom',
       clip: true,
       data: fields,
-      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) => this.renderLayout(params, api, fields)
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) =>
+        this.renderLayout(params, api, fields)
     };
 
     this.series.push(layout);
     return this;
   }
 
-  public withArrows(): SeriesBuilder {
+  public arrows(): SeriesBuilder {
     // TODO:
     return this;
   }
 
-  public withMarks(): SeriesBuilder {
+  public marks(): SeriesBuilder {
     // TODO:
     return this;
   }
@@ -58,11 +58,12 @@ export class SeriesBuilder {
     return this.series;
   }
 
-  private renderCircle(_: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI): CustomSeriesRenderItemReturn {
+  private renderCircle(_: CustomSeriesRenderItemParams,
+                       api: CustomSeriesRenderItemAPI): CustomSeriesRenderItemReturn {
     let unit = 0;
-    if (api && api.size){
+    if (api && api.size) {
       const size = api.size([1, 1]);
-      if (size instanceof Array){
+      if (size instanceof Array) {
         unit = size[0];
       }
     }
@@ -83,13 +84,17 @@ export class SeriesBuilder {
   }
 
   private renderLayout(params: CustomSeriesRenderItemParams,
-                       api: CustomSeriesRenderItemAPI, fields: Field[]): CustomSeriesRenderItemReturn {
+                       api: CustomSeriesRenderItemAPI,
+                       fields: Field[]): CustomSeriesRenderItemReturn {
     const item = fields[params.dataIndex];
-    const coordinates = [item.coordinates.x - item.size.width / 2.0, item.coordinates.y + item.size.height / 2.0];
+    const coordinates = [
+      item.coordinates.x - item.size.width / 2.0,
+      item.coordinates.y + item.size.height / 2.0
+    ];
     let unit = 0;
-    if (api && api.size){
+    if (api && api.size) {
       const size = api.size([1, 1]);
-      if (size instanceof Array){
+      if (size instanceof Array) {
         unit = size[0];
       }
     }

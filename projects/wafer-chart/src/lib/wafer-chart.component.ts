@@ -14,7 +14,7 @@ import {
 import {LabelLayout, UniversalTransition} from 'echarts/features';
 import {CanvasRenderer} from 'echarts/renderers';
 import {CustomChart} from 'echarts/charts';
-import {Field, Series} from './model';
+import {ArrowInfo, Field} from './model';
 import {SeriesBuilder} from './series-builder';
 import {ChartBuilder} from './chart-builder';
 
@@ -34,14 +34,12 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() radius = 150;
 
   @Input() showNotch = true;
-  @Input() showFields = true;
-  @Input() showMarks = true;
-  @Input() showArrows = true;
   @Input() showAxis = true;
   @Input() showGrid = true;
   @Input() interval = 20;
 
-  @Input() fields$: Observable<Field[]> = of([]);
+  @Input() fields$: Observable<Field[]> = of();
+  @Input() arrows$: Observable<ArrowInfo[]> = of();
 
   private fieldsSubscription: Subscription | undefined;
 
@@ -63,22 +61,14 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawChart(fields: Field[]): void {
-    let series: Series[];
-    let builder = new SeriesBuilder().withWaferCircle(150);
+    let builder = new SeriesBuilder().circle(150);
+    builder = this.showNotch ? builder.notch() : builder;
 
-    if (this.showNotch) {
-      builder = builder.withWaferNotch();
-    }
-    if (this.showFields) {
-      builder = builder.withFieldLayout(fields.length > 0 ? fields : []);
-    }
-    if (this.showArrows) {
-      builder = builder.withArrows();
-    }
-    if (this.showMarks) {
-      builder = builder.withMarks();
-    }
-    series = builder.build();
+    const series = builder
+      .layout(fields.length > 0 ? fields : [])
+      .arrows()
+      .marks()
+      .build();
 
     this.chart = new ChartBuilder()
       .init(this.domId, this.width, this.height)
@@ -104,7 +94,7 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
       CustomChart,
       LegendComponent,
       TooltipComponent,
-      DataZoomComponent
+      DataZoomComponent,
     ]);
   }
 

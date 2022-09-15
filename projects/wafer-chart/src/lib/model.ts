@@ -45,3 +45,28 @@ export class MetaItem {
     public extra: object) {
   }
 }
+
+export class ArrowChartInfo {
+  constructor(public arrowInfos: ArrowInfo[], public lotId: string, public waferId: string) {
+  }
+}
+
+export class ArrowInfo {
+  constructor(public coord: Coordinate, public offset: Offset) {
+  }
+}
+
+export class Coordinate {
+  constructor(public x: number, public y: number) {
+  }
+}
+
+export class Offset {
+  constructor(public dx: number, public dy: number) {
+  }
+}
+
+export class ChartInfo {
+  constructor(public fields: Field[], public arrows: ArrowInfo[]) {
+  }
+}
