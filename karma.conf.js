@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/wafer-chart'),
+      dir: require('path').join(__dirname, './coverage/onenx-charts'),
       subdir: '.',
       reporters: [
         { type: 'html' },

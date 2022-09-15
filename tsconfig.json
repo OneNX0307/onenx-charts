@@ -22,8 +22,8 @@
     ],
     "paths": {
       "wafer-chart": [
-        "dist/wafer-chart/wafer-chart",
-        "dist/wafer-chart"
+        "dist/wafer-chart",
+        "dist/onenx-charts"
       ]
     }
   },
