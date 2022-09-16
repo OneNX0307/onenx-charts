@@ -6,7 +6,7 @@ npm install ngx-wafer-chart --save
 ```
 # Usage
 ```html
-<ngx-ngx-wafer-chart [fields$]="fields$"></ngx-ngx-wafer-chart>
+<ngx-wafer-chart [fields$]="fields$"></ngx-wafer-chart>
 ```
 
 ```typescript
