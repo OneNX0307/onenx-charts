@@ -39,6 +39,7 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showAxis = true;
   @Input() showGrid = true;
   @Input() interval = 20;
+  @Input() fill = false;
 
   @Input() fields$: Observable<Field[]> = of();
   @Input() arrows$: Observable<ArrowInfo[]> = of();
@@ -69,7 +70,7 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const series = builder
       .layout(info.fields.length > 0 ? info.fields : [])
-      .arrows(info.arrows.length > 0 ? info.arrows : [])
+      .arrows(info.arrows.length > 0 ? info.arrows : [], this.fill)
       .marks()
       .build();
 

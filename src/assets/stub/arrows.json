@@ -3,8 +3,8 @@
     "lotId": "lot01",
     "waferId": "wafer01",
     "coordinate2d": {
-      "x": 30,
-      "y": 40
+      "x": 13.0,
+      "y": 16.5
     },
     "offset": {
       "dx": 10,

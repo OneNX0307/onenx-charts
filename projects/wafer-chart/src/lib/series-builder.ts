@@ -47,15 +47,14 @@ export class SeriesBuilder {
     return this;
   }
 
-  public arrows(arrows: ArrowInfo[]): SeriesBuilder {
+  public arrows(arrows: ArrowInfo[], fill: boolean = false): SeriesBuilder {
     const arrowsSeries: CustomSeriesOption = {
       type: 'custom',
       clip: true,
       data: arrows,
       renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) =>
-        this.renderArrows(params, api, arrows)
+        this.renderArrows(params, api, arrows, fill)
     };
-
     this.series.push(arrowsSeries);
     return this;
   }
@@ -128,11 +127,27 @@ export class SeriesBuilder {
 
   private renderArrows(params: CustomSeriesRenderItemParams,
                        api: CustomSeriesRenderItemAPI,
-                       arrows: ArrowInfo[]): CustomSeriesRenderItemReturn {
+                       arrows: ArrowInfo[],
+                       fill: boolean): CustomSeriesRenderItemReturn {
     const item = arrows[params.dataIndex];
-    const sourceCoordinate = [item.coordinate2d.x, item.coordinate2d.y];
-    const desCoordinate = [item.coordinate2d.x + item.offset.dx, item.coordinate2d.y + item.offset.dy];
+    const sourceCoord = [item.coordinate2d.x, item.coordinate2d.y];
+    const targetCoord = [item.coordinate2d.x + item.offset.dx, item.coordinate2d.y + item.offset.dy];
+    const L = Math.sqrt(
+      Math.pow(sourceCoord[0] - targetCoord[0], 2) +
+         Math.pow(sourceCoord[1] - targetCoord[1], 2)
+    );
+    const arrowLength = L * 33.0 / 100.0;
+    const angle = Math.PI / 6.0;
+    const x = targetCoord[0] - (targetCoord[0] - sourceCoord[0]) * arrowLength / L;
+    const y = targetCoord[1] - (targetCoord[1] - sourceCoord[1]) * arrowLength / L;
 
+    const arrow1X = targetCoord[0] + (x - targetCoord[0]) * Math.cos(angle) - (y - targetCoord[1]) * Math.sin(angle);
+    const arrow1Y = targetCoord[1] + (x - targetCoord[0]) * Math.sin(angle) + (y - targetCoord[1]) * Math.cos(angle);
+    const arrow1Coord = [arrow1X, arrow1Y];
+
+    const arrow2X = targetCoord[0] + (x - targetCoord[0]) * Math.cos(angle) + (y - targetCoord[1]) * Math.sin(angle);
+    const arrow2Y = targetCoord[1] - (x - targetCoord[0]) * Math.sin(angle) + (y - targetCoord[1]) * Math.cos(angle);
+    const arrow2Coord = [arrow2X, arrow2Y];
     return {
       type: 'group',
       children: [
@@ -140,12 +155,16 @@ export class SeriesBuilder {
           type: 'path',
           z2: 3,
           shape: {
-            pathData: `M ${api.coord(sourceCoordinate)[0]} ${api.coord(sourceCoordinate)[1]}
-                         ${api.coord(desCoordinate)[0]} ${api.coord(desCoordinate)[1]}`
+            pathData: `
+              M ${api.coord(sourceCoord)[0]}, ${api.coord(sourceCoord)[1]}
+              L ${api.coord(targetCoord)[0]}, ${api.coord(targetCoord)[1]}
+              L ${api.coord(arrow1Coord)[0]}, ${api.coord(arrow1Coord)[1]}` +
+             `L ${api.coord(fill ? arrow2Coord : targetCoord)[0]}, ${api.coord(fill ? arrow2Coord : targetCoord)[1]}` +
+             `L ${api.coord(fill ? targetCoord : arrow2Coord)[0]}, ${api.coord(fill ? targetCoord : arrow2Coord)[1]}`
           },
           style: {
             stroke: item.color,
-            fill: 'transparent',
+            fill: fill ? 'red' : 'transparent',
             lineWidth: 0.5
           }
         }
