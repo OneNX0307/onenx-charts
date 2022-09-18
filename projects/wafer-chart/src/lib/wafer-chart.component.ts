@@ -65,12 +65,11 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawChart(info: ChartInfo): void {
-    let builder = new SeriesBuilder().circle(150);
-    builder = this.showNotch ? builder.notch() : builder;
-
-    const series = builder
-      .layout(info.fields.length > 0 ? info.fields : [])
-      .arrows(info.arrows.length > 0 ? info.arrows : [], this.fill)
+    const series = new SeriesBuilder()
+      .circle(150)
+      .notch(true)
+      .fields(info.fields)
+      .arrows(info.arrows, this.fill)
       .marks()
       .build();
 

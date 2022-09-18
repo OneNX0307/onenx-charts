@@ -25,14 +25,14 @@ export class SeriesBuilder {
     return this;
   }
 
-  public notch(): SeriesBuilder {
-    // TODO:
+  public notch(showNotch: boolean): SeriesBuilder {
+    // TODO:ß
 
     return this;
   }
 
-  public layout(fields: Field[]): SeriesBuilder {
-    if (fields.length <= 0) {
+  public fields(fields: Field[]): SeriesBuilder {
+    if (!fields || fields.length <= 0) {
       return this;
     }
     const layout: CustomSeriesOption = {
@@ -48,6 +48,9 @@ export class SeriesBuilder {
   }
 
   public arrows(arrows: ArrowInfo[], fill: boolean = false): SeriesBuilder {
+    if (!arrows || arrows.length <= 0) {
+      return this;
+    }
     const arrowsSeries: CustomSeriesOption = {
       type: 'custom',
       clip: true,

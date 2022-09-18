@@ -45,7 +45,7 @@ export class ChartBuilder {
         top: '10%',
         bottom: '10%',
         left: '10%',
-        right: '10%'
+        right: '10%',
       }
     ];
     return this;
@@ -55,15 +55,8 @@ export class ChartBuilder {
     this.option.dataZoom = [
       {
         type: 'inside',
-        filterMode: 'none',
+        filterMode: 'filter',
         xAxisIndex: 0,
-        rangeMode: ['value', 'value'],
-        startValue: start,
-        endValue: end
-      },
-      {
-        type: 'inside',
-        filterMode: 'none',
         yAxisIndex: 0,
         rangeMode: ['value', 'value'],
         startValue: start,
@@ -85,6 +78,9 @@ export class ChartBuilder {
         },
         axisLine: {
           show: false
+        },
+        axisLabel: {
+          show: false
         }
       }
     ];
@@ -98,6 +94,9 @@ export class ChartBuilder {
           show: false
         },
         axisLine: {
+          show: false
+        },
+        axisLabel: {
           show: false
         }
       }
