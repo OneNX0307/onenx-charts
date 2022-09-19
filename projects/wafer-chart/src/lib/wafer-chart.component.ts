@@ -17,8 +17,9 @@ import {CustomChart} from 'echarts/charts';
 import {SeriesBuilder} from './series-builder';
 import {ChartBuilder} from './chart-builder';
 import {Field} from '../model/field';
-import {ArrowInfo} from '../model/arrow-info';
+import {MetaInfo} from '../model/meta-info';
 import {ChartInfo} from '../model/chart-info';
+import {MarkInfo} from '../model/mark-info';
 
 @Component({
   selector: 'ngx-wafer-chart',
@@ -42,7 +43,8 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() fill = false;
 
   @Input() fields$: Observable<Field[]> = of();
-  @Input() arrows$: Observable<ArrowInfo[]> = of();
+  @Input() arrows$: Observable<MetaInfo[]> = of();
+  @Input() marks$: Observable<MarkInfo[]> = of();
 
   private fieldsSubscription: Subscription | undefined;
 
@@ -55,7 +57,8 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     forkJoin({
       fields: this.fields$,
-      arrows: this.arrows$
+      arrows: this.arrows$,
+      marks: this.marks$
     }).subscribe((data: ChartInfo) => this.drawChart(data));
   }
 
@@ -70,7 +73,7 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .notch(true)
       .fields(info.fields)
       .arrows(info.arrows, this.fill)
-      .marks()
+      .marks(info.marks)
       .build();
 
     this.chart = new ChartBuilder()
@@ -80,7 +83,8 @@ export class WaferChartComponent implements OnInit, AfterViewInit, OnDestroy {
       .axis(-this.radius, this.radius, this.interval)
       .zoom(-this.radius, this.radius)
       .series(series)
-      .build();
+      .build()
+      .actions(this.radius);
   }
 
   private registerComponents(): void {

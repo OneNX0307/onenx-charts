@@ -5,7 +5,8 @@ import {
   CustomSeriesRenderItemReturn
 } from 'echarts/types/dist/echarts';
 import {Field} from '../model/field';
-import {ArrowInfo} from '../model/arrow-info';
+import {MetaInfo} from '../model/meta-info';
+import {MarkInfo} from '../model/mark-info';
 
 type Series = CustomSeriesOption;
 
@@ -47,7 +48,7 @@ export class SeriesBuilder {
     return this;
   }
 
-  public arrows(arrows: ArrowInfo[], fill: boolean = false): SeriesBuilder {
+  public arrows(arrows: MetaInfo[], fill: boolean = false): SeriesBuilder {
     if (!arrows || arrows.length <= 0) {
       return this;
     }
@@ -62,8 +63,19 @@ export class SeriesBuilder {
     return this;
   }
 
-  public marks(): SeriesBuilder {
-    // TODO:
+  public marks(marks: MarkInfo[]): SeriesBuilder {
+    if (!marks || marks.length <= 0) {
+      return this;
+    }
+    const series: CustomSeriesOption = {
+      type: 'custom',
+      clip: true,
+      data: marks,
+      renderItem: (params: CustomSeriesRenderItemParams, api: CustomSeriesRenderItemAPI) =>
+        this.renderMarks(params, api, marks)
+    };
+
+    this.series.push(series);
     return this;
   }
 
@@ -125,16 +137,17 @@ export class SeriesBuilder {
         fill: 'grey',
         stroke: 'black'
       },
+      silent: true
     };
   }
 
   private renderArrows(params: CustomSeriesRenderItemParams,
                        api: CustomSeriesRenderItemAPI,
-                       arrows: ArrowInfo[],
+                       arrows: MetaInfo[],
                        fill: boolean): CustomSeriesRenderItemReturn {
     const item = arrows[params.dataIndex];
     const sourceCoord = [item.coordinate2d.x, item.coordinate2d.y];
-    const targetCoord = [item.coordinate2d.x + item.offset.dx, item.coordinate2d.y + item.offset.dy];
+    const targetCoord = [item.coordinate2d.x + item.value2d.dx, item.coordinate2d.y + item.value2d.dy];
     const L = Math.sqrt(
       Math.pow(sourceCoord[0] - targetCoord[0], 2) +
          Math.pow(sourceCoord[1] - targetCoord[1], 2)
@@ -172,6 +185,36 @@ export class SeriesBuilder {
           }
         }
       ]
+    };
+  }
+  private renderMarks(params: CustomSeriesRenderItemParams,
+                      api: CustomSeriesRenderItemAPI,
+                      marks: MarkInfo[]): CustomSeriesRenderItemReturn{
+    const item = marks[params.dataIndex];
+    const coordinates = [
+      item.metaInfo.coordinate2d.x - item.size.width / 2.0,
+      item.metaInfo.coordinate2d.y + item.size.height / 2.0
+    ];
+    let unit = 0;
+    if (api && api.size) {
+      const size = api.size([1, 1]);
+      if (size instanceof Array) {
+        unit = size[0];
+      }
+    }
+    return {
+      type: 'rect',
+      z2: 4,
+      shape: {
+        x: api.coord(coordinates)[0],
+        y: api.coord(coordinates)[1],
+        width: unit * item.size.width,
+        height: unit * item.size.height
+      },
+      style: {
+        fill: item.metaInfo.color,
+        stroke: item.metaInfo.color
+      },
     };
   }
 }

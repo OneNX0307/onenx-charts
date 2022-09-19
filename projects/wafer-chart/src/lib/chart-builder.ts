@@ -1,16 +1,14 @@
 import * as echarts from 'echarts/core';
 import {EChartsType} from 'echarts/core';
 import {DatasetComponentOption, GridComponentOption, TitleComponentOption} from 'echarts/components';
-import {CustomSeriesOption, ScatterSeriesOption, TooltipComponentOption} from 'echarts';
+import {CustomSeriesOption, EChartsOption, ScatterSeriesOption, TooltipComponentOption} from 'echarts';
 
-type ECOption = echarts.ComposeOption<
-  | TitleComponentOption
+type ECOption = echarts.ComposeOption<| TitleComponentOption
   | TooltipComponentOption
   | GridComponentOption
   | DatasetComponentOption
   | CustomSeriesOption
-  | ScatterSeriesOption
-  >;
+  | ScatterSeriesOption>;
 
 type Series = CustomSeriesOption;
 
@@ -57,6 +55,13 @@ export class ChartBuilder {
         type: 'inside',
         filterMode: 'filter',
         xAxisIndex: 0,
+        rangeMode: ['value', 'value'],
+        startValue: start,
+        endValue: end
+      },
+      {
+        type: 'inside',
+        filterMode: 'filter',
         yAxisIndex: 0,
         rangeMode: ['value', 'value'],
         startValue: start,
@@ -109,10 +114,61 @@ export class ChartBuilder {
     return this;
   }
 
-  public build(): EChartsType | undefined {
+  public actions(radius: number, postZoom?: () => void): EChartsType | undefined {
+    if (!this.chart) {
+      return undefined;
+    }
+
+    this.chart.on('dataZoom', (event: any) => {
+      if (event.batch) {
+        if (event.batch.length > 1) {
+          const option = this.chart?.getOption() as EChartsOption;
+          if (option &&
+            option.dataZoom &&
+            option.dataZoom instanceof Array &&
+            option.dataZoom.length >= 2) {
+            const zoomX = option.dataZoom[0];
+            const zoomY = option.dataZoom[1];
+            if (zoomX.startValue &&
+                zoomY.endValue &&
+                zoomX.startValue &&
+                zoomY.endValue &&
+                typeof zoomX.startValue === 'number' &&
+                typeof zoomX.endValue === 'number' &&
+                typeof zoomY.startValue === 'number' &&
+                typeof zoomY.endValue === 'number') {
+              const xRange = zoomX.endValue - zoomX.startValue;
+              const yRange = zoomY.endValue - zoomY.startValue;
+              if (xRange === yRange) {
+                // do nothing.
+              } else if (xRange > yRange) {
+                this.chart?.dispatchAction({
+                  type: 'dataZoom',
+                  dataZoomIndex: 0,
+                  startValue: zoomX.startValue + xRange - yRange,
+                  endValue: zoomX.endValue
+                });
+              } else {
+                this.chart?.dispatchAction({
+                  type: 'dataZoom',
+                  dataZoomIndex: 1,
+                  startValue: zoomY.startValue + yRange - xRange,
+                  endValue: zoomY.endValue
+                });
+              }
+            }
+          }
+        }
+      }
+      postZoom?.();
+    });
+    return this.chart;
+  }
+
+  public build(): ChartBuilder {
     this.chart?.clear();
     this.chart?.setOption(this.option);
-    return this.chart;
+    return this;
   }
 
 }

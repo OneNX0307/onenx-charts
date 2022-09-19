@@ -1,0 +1,40 @@
+[
+  {
+    "metaInfo": {
+      "lotId": "lot01",
+      "waferId": "wafer01",
+      "coordinate2d": {
+        "x": 13.0,
+        "y": 16.5
+      },
+      "value2d": {
+        "dx": 10,
+        "dy": 15
+      },
+      "color": "green"
+    },
+    "size": {
+      "width": 3,
+      "height": 6
+    }
+  },
+  {
+    "metaInfo": {
+      "lotId": "lot01",
+      "waferId": "wafer01",
+      "coordinate2d": {
+        "x": 13.0,
+        "y": 16.5
+      },
+      "value2d": {
+        "dx": 10,
+        "dy": 15
+      },
+      "color": "blue"
+    },
+    "size": {
+      "width": 6,
+      "height": 3
+    }
+  }
+]
